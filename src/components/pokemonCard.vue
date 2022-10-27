@@ -1,5 +1,8 @@
 <script setup>
-import {ref, defineProps} from "vue"
+
+
+
+import {defineProps} from "vue"
 const props = defineProps({
     name: String,
     pokemonImgUrl: String,
@@ -10,10 +13,10 @@ const props = defineProps({
 </script>
 <template>
 
-    <div class="pokemonCard">
+    <a class="pokemonCard" :href="url">
         <img :src="pokemonImgUrl" :alt="pokemonImgAlt">
         <h2>{{name}}</h2>
-    </div>
+    </a>
 
 </template>
 <style scoped>
@@ -24,6 +27,13 @@ const props = defineProps({
         padding: 30px;
         margin: 20px;
         box-shadow: 3px 3px 3px 3px black;
+        transition: 0.1s ease-in-out;
+        cursor: pointer;
+        color: black;
+    }
+
+    .pokemonCard:hover{
+        transform: scale(1.1);
     }
 
 </style>
