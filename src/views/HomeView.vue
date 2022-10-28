@@ -42,7 +42,15 @@ onMounted(() => {
     <div class="verticalAlign mainContentDiv">
         <h1 class="bigTitle">Liste des pokémons</h1>
         <div class="pokemonGrid">
-            <pokemonCard v-for="pokemon in pokemonList" :key="pokemon.name" :name="pokemon.name" :url="pokemon.url" :pokemonImgUrl="pokemon.pokemonImgUrl" :pokemonImgAlt="pokemon.pokemonImgUrl" data-aos="fade-up"/>
+            <pokemonCard v-for="pokemon in pokemonList" 
+            :key="pokemon.name" 
+            :name="pokemon.name" 
+            :url="pokemon.url" 
+            :pokemonImgUrl="pokemon.pokemonImgUrl" 
+            :pokemonImgAlt="pokemon.pokemonImgUrl" 
+            data-aos="flip-left"
+     data-aos-easing="ease-out-cubic"
+     data-aos-duration="500"/>
         </div>
         <button class="loadMoreBtn" @click="fetchPokemon(numberOfPok)"> Load {{limit}} more </button>
     </div>
