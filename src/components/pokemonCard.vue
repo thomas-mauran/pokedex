@@ -2,7 +2,7 @@
 
 
 
-import {defineProps} from "vue"
+import {defineProps, ref} from "vue"
 const props = defineProps({
     name: String,
     pokemonImgUrl: String,
@@ -10,10 +10,33 @@ const props = defineProps({
     url: String
 })
 
+function randomNumber(max, min){
+    return Math.floor(Math.random() * max) + min; 
+
+}
+
+function randomBorderRadius(){
+    let string = "border-radius:"
+    for(let i = 0; i < 8; i ++){
+        string += ` ${randomNumber(65, 40)}%`
+        if(i === 3) string += " /"
+    }
+    string += ";"
+    return string
+}
+
+function randomColor(){
+    return `background-color: rgba(${randomNumber(255, 0)}, ${randomNumber(255, 0)}, ${randomNumber(255, 0)}, 0.4`
+
+}
+
+const customStyle = randomBorderRadius() + randomColor()
+console.log(customStyle)
+
 </script>
 <template>
 
-    <a class="pokemonCard" :href="url">
+    <a class="pokemonCard" :href="url" :style="customStyle">
         <img :src="pokemonImgUrl" :alt="pokemonImgAlt">
         <h2>{{name}}</h2>
     </a>
@@ -23,7 +46,6 @@ const props = defineProps({
 
     .pokemonCard{
         min-width: 200px;
-        border-radius: 10px;
         padding: 30px;
         margin: 20px;
         box-shadow: 3px 3px 3px 3px black;
