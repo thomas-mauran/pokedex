@@ -14,7 +14,7 @@ function fetchPokemon(){
 
             let currentPokemon = {
                 name: pokemon.name,
-                url: `/pokemon/${i+1}`,
+                url: `/pokemon/${pokemon.name}`,
                 pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + 1}.png`,
                 pokemonImgAlt: `Image du pokemon ${pokemon.name}`
             }
