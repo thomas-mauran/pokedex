@@ -21,7 +21,7 @@ function randomBorderRadius(){
 }
 
 function randomColor(){
-    return `box-shadow: 0px 5px 5px 5px rgba(${randomNumber(255, 50)}, ${randomNumber(255, 50)}, ${randomNumber(200, 50)}, 0.8`
+    return `box-shadow: 0px 5px 5px 3px rgba(${randomNumber(255, 50)}, ${randomNumber(255, 50)}, ${randomNumber(200, 50)}, 0.8`
 
 }
 
@@ -46,10 +46,11 @@ const customStyle = randomBorderRadius() + randomColor()
         transition: 0.1s ease-in-out;
         cursor: pointer;
         color: black;
+        transition: 0.1s ease-in-out;
     }
 
     .pokemonCard:hover{
-        box-shadow: 0px 0px 0px 0px black;
+        background-color: rgba(0, 0, 0, 0.1);
     }
 
 </style>
