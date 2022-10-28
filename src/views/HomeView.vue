@@ -1,4 +1,5 @@
 <script setup>
+import AOS from "aos";
 
 import P from "../services/Pokedex"
 import {onMounted, ref} from "vue"
@@ -7,7 +8,7 @@ import pokemonCard from "../components/pokemonCard.vue"
 
 let pokemonList = ref([])
 const numberOfPok = ref(0)
-const limit = 24
+const limit = 48
 
 async function fetchPokemon(offset = 0){
     await P.getPokemonsList({ offset, limit}).then(function(response) {
@@ -29,8 +30,11 @@ async function fetchPokemon(offset = 0){
 }
 
 onMounted(() => {
+    AOS.init()
     fetchPokemon(numberOfPok.value)
 })
+
+  AOS.init();
 
 </script>
 
@@ -38,7 +42,7 @@ onMounted(() => {
     <div class="verticalAlign mainContentDiv">
         <h1 class="bigTitle">Liste des pokémons</h1>
         <div class="pokemonGrid">
-            <pokemonCard v-for="pokemon in pokemonList" :key="pokemon.name" :name="pokemon.name" :url="pokemon.url" :pokemonImgUrl="pokemon.pokemonImgUrl" :pokemonImgAlt="pokemon.pokemonImgUrl"/>
+            <pokemonCard v-for="pokemon in pokemonList" :key="pokemon.name" :name="pokemon.name" :url="pokemon.url" :pokemonImgUrl="pokemon.pokemonImgUrl" :pokemonImgAlt="pokemon.pokemonImgUrl" data-aos="fade-up"/>
         </div>
         <button class="loadMoreBtn" @click="fetchPokemon(numberOfPok)"> Load {{limit}} more </button>
     </div>
@@ -51,6 +55,7 @@ onMounted(() => {
 }
 
 .loadMoreBtn{
+    cursor: pointer;
     font-size: 1.2em;
     font-weight: bold;
     color: white;
@@ -59,7 +64,7 @@ onMounted(() => {
     padding: 20px 30px;
     border: none;
     border-radius: 62% 38% 70% 30% / 37% 43% 57% 63%  ;
-    background-color: green;
+    background-color: rgba(51, 162, 51, 0.6);
 }
 .pokemonGrid{
     display: grid;

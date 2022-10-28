@@ -19,7 +19,7 @@ let statsList = ref([])
             pokemon.value = response
             pokeImg.value = response.sprites.other["official-artwork"].front_default
             response.types.forEach(element => {
-                typeImg.value.push(`https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Pok%C3%A9mon_${element.type.name}_Icon.svg/120px-Pok%C3%A9mon_${element.type.name}_Icon.svg.png`)
+                typeImg.value.push(`https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Pok%C3%A9mon_${element["type"].name}_Icon.svg/120px-Pok%C3%A9mon_${element["type"].name}_Icon.svg.png`)
             });
 
             response.stats.forEach(stat => {
