@@ -1,9 +1,9 @@
 <script setup></script>
 <template>
-    <img class="loadingGif" src="../assets/loading.gif" alt="">
+    <img class="loadingGif" src="../assets/pokemon.gif" alt="">
 </template>
 <style>
 .loadingGif{
-    width: 40vw;
+    width: 10vw;
 }
 </style>

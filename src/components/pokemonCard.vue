@@ -26,6 +26,7 @@ const customStyle = randomBorderRadius() + randomColor()
 <style scoped>
 
     .pokemonCard{
+        background-color: white;
         min-width: 200px;
         padding: 40px 0px;
         margin: 20px;
@@ -38,7 +39,7 @@ const customStyle = randomBorderRadius() + randomColor()
     }
 
     .pokemonCard:hover{
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(240, 240, 240, 1);
     }
 
 </style>

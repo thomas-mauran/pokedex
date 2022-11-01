@@ -25,6 +25,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style>
 
+
 .bigTitle{
   font-weight: bold;
 }

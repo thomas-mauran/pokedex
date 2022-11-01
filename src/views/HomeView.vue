@@ -46,31 +46,50 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="verticalAlign mainContentDiv">
-        <h1 class="bigTitle">Liste des pokémons</h1>
+        <div class="backgroundImg"></div>
 
-        <div class="pokemonGrid">
-            <pokemonCard v-for="pokemon in pokemonList" 
-            :key="pokemon.name" 
-            :name="pokemon.name" 
-            :url="pokemon.url" 
-            :pokemonImgUrl="pokemon.pokemonImgUrl" 
-            :pokemonImgAlt="pokemon.pokemonImgUrl" 
-            :id="pokemon.id"
-            data-aos="flip-left"
-     data-aos-easing="ease-out-cubic"
-     data-aos-duration="500"/>
+        <div class="verticalAlign mainContentDiv">
+            <h1 class="bigTitle">Liste des pokémons</h1>
+
+            <div class="pokemonGrid">
+                <pokemonCard v-for="pokemon in pokemonList" 
+                :key="pokemon.name" 
+                :name="pokemon.name" 
+                :url="pokemon.url" 
+                :pokemonImgUrl="pokemon.pokemonImgUrl" 
+                :pokemonImgAlt="pokemon.pokemonImgUrl" 
+                :id="pokemon.id"
+                data-aos="flip-left"
+        data-aos-easing="ease-out-cubic"
+        data-aos-duration="500"/>
+            </div>
+            <loading v-if ="isLoading===true"></loading>
+
+            <button v-if ="isLoading===false" class="loadMoreBtn" @click="fetchPokemon(numberOfPok)"> Load {{limit}} more </button>
         </div>
-        <loading v-if ="isLoading===true"></loading>
-
-        <button class="loadMoreBtn" @click="fetchPokemon(numberOfPok)"> Load {{limit}} more </button>
-    </div>
 </template>
 <style>
 
+.backgroundImg{
+    top: 0px;
+    position: fixed;
+    background-image: url("../assets/pokebg.png");
+    opacity: 30%;
+    background-size: 150px;
+    background-repeat: unset;
+    background-blend-mode: light;
+    width: 100vw;
+    height: 100vh;
+    z-index: -3;
+    filter: brightness(50%);
+}
+
 .mainContentDiv{
+    z-index: 2;
     display: flex;
     margin: 0px 5vw 2vh 5vw;
+
+
 }
 
 .loadMoreBtn{
@@ -83,7 +102,7 @@ onMounted(() => {
     padding: 20px 30px;
     border: none;
     border-radius: 62% 38% 70% 30% / 37% 43% 57% 63%  ;
-    background-color: rgba(51, 162, 51, 0.6);
+    background-color: rgba(51, 162, 51, 1);
 }
 .pokemonGrid{
     display: grid;
