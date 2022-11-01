@@ -1,6 +1,6 @@
 <script setup>
 
-
+import {randomBorderRadius, randomColor} from "../services/randomStyle"
 
 import {defineProps, ref} from "vue"
 const props = defineProps({
@@ -10,21 +10,6 @@ const props = defineProps({
     url: String,
     id: String
 })
-
-function randomNumber(max, min){
-    return Math.floor(Math.random() * max) + min; 
-
-}
-
-function randomBorderRadius(){
-    let string = `border-radius: 50% 50% ${randomNumber(70, 40)}% ${randomNumber(70, 40)}% / 50% ${randomNumber(70, 40)}% 50% ${randomNumber(70, 40)}%;`
-    return string
-}
-
-function randomColor(){
-    return `box-shadow: 0px 5px 5px 3px rgba(${randomNumber(255, 50)}, ${randomNumber(255, 50)}, ${randomNumber(200, 50)}, 0.8`
-
-}
 
 const customStyle = randomBorderRadius() + randomColor()
 

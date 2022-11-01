@@ -15,6 +15,9 @@
       type: "radar",
       
     },
+
+
+
     markers: {
               size: 4,
               colors: ['#fff'],
@@ -51,8 +54,6 @@
 </script>
 
 <template>
-    <h1>Salut</h1>
-
   <apexchart type="radar" width="600" height="600" :options="chartOptions" :series="series"/>
 </template>
 

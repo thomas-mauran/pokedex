@@ -2,7 +2,8 @@
 import P from "../services/Pokedex"
 import { useRoute } from 'vue-router';
 import {onMounted, ref} from "vue"
-import pokemonRadarChart from "../components/pokemonRadarChart.vue";
+import pokemonRadarChartVue from "../components/pokemonRadarChart.vue";
+import {randomBorderRadius, randomColor} from "../services/randomStyle"
 
 const route = useRoute();  
 const name = route.params.id;
@@ -33,39 +34,59 @@ let statsList = ref([])
         fetchPokemonInfo()
     })
 
+    const customStyle = randomBorderRadius() + randomColor()
+
 </script>
 <template>
 
-    <div class="mainContentDiv">
-
-        <article>
+    <div class="verticalAlign mainDiv" >
+        <div class="colorBackground" >
+            <img class="bigImage" :src="pokeImg" alt="image of the pokemon {{pokemon.name}}">
             <h1 class="bigTitle">{{pokemon.name}}</h1>
-            <h2>Height : {{pokemon.height}}</h2>
-            <h2>Weight : {{pokemon.weight}}</h2>
+        </div>
+            <div class="horizontalAlign">
 
-            <pokemonRadarChart :seriesData="statsList"/>
+            <article>
+                <h2>Height : {{pokemon.height}}</h2>
+                <h2>Weight : {{pokemon.weight}}</h2>
+            </article>
+            <article>
+                <pokemonRadarChartVue :seriesData="statsList"/>
+                
+            </article>
+        </div>
+
+
 
             <img v-for="t in typeImg" :src="t" :alt="t">
 
 
-        </article>
-        <aside>
-            <img :src="pokeImg" alt="image of the pokemon">
-        </aside>
 
     </div>
 
 </template>
 <style>
 
+.mainDiv{
+    margin: 100px;
+}
 
+.colorBackground{
+    padding: 50px;
+}
+
+.bigImage{
+    width: 10vw;
+}
+
+.horizontalAlign{
+    display: flex;
+    flex-direction: row;
+}
 
 article{
-    
-    width: 65vw;
+    width: 40vw;
 }
 
-aside{
-    width: 25vw;
-}
+
 </style>
