@@ -5,12 +5,15 @@ import P from "../services/Pokedex"
 import {onMounted, ref} from "vue"
 
 import pokemonCard from "../components/pokemonCard.vue"
+import loading from "../components/loading.vue"
 
 let pokemonList = ref([])
 const numberOfPok = ref(0)
 const limit = 48
+const isLoading = ref(false)
 
 async function fetchPokemon(offset = 0){
+    isLoading.value = true
     await P.getPokemonsList({ offset, limit}).then(function(response) {
         for(let i = 0; i < response.results.length; i ++){
             let pokemon = response.results[i]
@@ -20,13 +23,17 @@ async function fetchPokemon(offset = 0){
                 name: pokemon.name,
                 url: `/pokemon/${pokemon.name}`,
                 pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + numberOfPok.value +1}.png`,
-                pokemonImgAlt: `Image du pokemon ${pokemon.name}`
+                pokemonImgAlt: `Image du pokemon ${pokemon.name}`,
+                id: i + numberOfPok.value +1
             }
             pokemonList.value.push(currentPokemon)
         }
         
     })
+
     numberOfPok.value += 24
+    isLoading.value = false
+
 }
 
 onMounted(() => {
@@ -41,6 +48,7 @@ onMounted(() => {
 <template>
     <div class="verticalAlign mainContentDiv">
         <h1 class="bigTitle">Liste des pokémons</h1>
+
         <div class="pokemonGrid">
             <pokemonCard v-for="pokemon in pokemonList" 
             :key="pokemon.name" 
@@ -48,10 +56,13 @@ onMounted(() => {
             :url="pokemon.url" 
             :pokemonImgUrl="pokemon.pokemonImgUrl" 
             :pokemonImgAlt="pokemon.pokemonImgUrl" 
+            :id="pokemon.id"
             data-aos="flip-left"
      data-aos-easing="ease-out-cubic"
      data-aos-duration="500"/>
         </div>
+        <loading v-if ="isLoading===true"></loading>
+
         <button class="loadMoreBtn" @click="fetchPokemon(numberOfPok)"> Load {{limit}} more </button>
     </div>
 </template>

@@ -7,7 +7,8 @@ const props = defineProps({
     name: String,
     pokemonImgUrl: String,
     pokemonImgAlt: String,
-    url: String
+    url: String,
+    id: String
 })
 
 function randomNumber(max, min){
@@ -32,6 +33,7 @@ const customStyle = randomBorderRadius() + randomColor()
 
     <a class="pokemonCard" :href="url" :style="customStyle">
         <img :src="pokemonImgUrl" :alt="pokemonImgAlt">
+        <h4>#{{id}}</h4>
         <h2>{{name}}</h2>
     </a>
 
@@ -47,6 +49,7 @@ const customStyle = randomBorderRadius() + randomColor()
         cursor: pointer;
         color: black;
         transition: 0.1s ease-in-out;
+        border-radius: 50% 50% 50% 50% / 50% 50% 50% 50% ;
     }
 
     .pokemonCard:hover{
