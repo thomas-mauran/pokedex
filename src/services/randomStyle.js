@@ -13,3 +13,9 @@ export function randomColor(){
 
 }
 
+export function randomColorBg(){
+    return `background-color: rgba(${randomNumber(255, 50)}, ${randomNumber(255, 50)}, ${randomNumber(200, 50)}, 0.8`
+
+}
+
+
