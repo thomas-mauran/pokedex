@@ -1,5 +1,10 @@
 import { Pokedex } from "pokeapi-js-wrapper";
 
-const P = new Pokedex()
+const options = {
+    cache: true,
+    cacheImages: true
+}
+
+const P = new Pokedex(options)
 
 export default P
