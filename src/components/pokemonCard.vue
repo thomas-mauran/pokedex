@@ -28,6 +28,7 @@ const customStyle = randomBorderRadius() + randomColor()
     .pokemonCard{
         background-color: white;
         min-width: 200px;
+        max-width: 200px;
         padding: 40px 0px;
         margin: 20px;
         box-shadow: 3px 3px 3px 3px black;
