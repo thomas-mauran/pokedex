@@ -13,7 +13,7 @@ const customStyle = randomBorderRadius() + randomColorBg()
 
 let pokemon = ref({})
 let pokeImg = ref("")
-let typeImg = ref([])
+let pokeType = ref([])
 let statsList = ref([])
 
 function fetchPokemonInfo() {
@@ -21,14 +21,19 @@ function fetchPokemonInfo() {
         pokemon.value = response
         pokeImg.value = response.sprites.other["official-artwork"].front_default
         response.types.forEach(element => {
-            typeImg.value.push(`https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Pok%C3%A9mon_${element["type"].name}_Icon.svg/120px-Pok%C3%A9mon_${element["type"].name}_Icon.svg.png`)
+            pokeType.value.push(element.type.name)
         });
 
         response.stats.forEach(stat => {
             statsList.value.push(stat.base_stat)
         })
-        console.log(typeImg.value)
+        console.log(pokeType.value)
+        console.log(pokeType.value.length)
+
+
     })
+
+
 }
 
 onMounted(() => {
@@ -45,8 +50,13 @@ onMounted(() => {
             <h1 class="bigTitle">{{ pokemon.name }}</h1>
             <h2>Height : {{ pokemon.height }}</h2>
             <h2>Weight : {{ pokemon.weight }}</h2>
+            <div class="typeDiv">
+                <h2>{{pokeType.length > 2 ? 'Types' : 'Type'}}</h2>
 
+                <h3 v-for="t in pokeType" :class="t">{{t}}</h3>
+            </div>
             <pokemonRadarChart :seriesData="statsList" />
+
 
 
         </article>
@@ -58,6 +68,35 @@ onMounted(() => {
 
 </template>
 <style scoped>
+
+/* Type colors  */
+
+.grass{
+    background-color: rgb(40, 140, 40);
+}
+
+.poison{
+    background-color: blueviolet;
+}
+
+.fire{
+    background-color: orangered;
+}
+
+.water{
+    background-color: blue;
+}
+
+.typeDiv{
+    display: flex;
+}
+
+.typeDiv h3{
+    border-radius: 10px;
+    padding: 5px;
+    color: white;
+    margin: 10px;
+}
 
 .pokeImgBig{
     width: 20vw;
