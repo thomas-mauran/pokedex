@@ -7,24 +7,19 @@
       seriesData: Array
   })
 
-  console.log(props.seriesData)
+
+  console.log({props: props.seriesData})
 
   let chartOptions = {
     chart: {
       id: "vuechart-example",
       type: "radar",
+      toolbar: {
+        show: false
+      }
       
     },
 
-
-
-    markers: {
-              size: 4,
-              colors: ['#fff'],
-              strokeColor: '#FF4560',
-              strokeWidth: 2,
-            },
-    
     stroke: {
       width: 3
     },
@@ -38,7 +33,7 @@
       categories: ["hp", "attack", "defense", "special-attack", "special-defense", "speed"]
     },
     theme: {
-     palette: 'palette2'
+     palette: 'palette1'
    },
    dataLabels: {
               enabled: true
@@ -54,7 +49,8 @@
 </script>
 
 <template>
-  <apexchart type="radar" width="600" height="600" :options="chartOptions" :series="series"/>
+  <apexchart class="chart" width="700px"  type="radar" :options="chartOptions" :series="series"/>
 </template>
 
-<style></style>
+<style>
+</style>
