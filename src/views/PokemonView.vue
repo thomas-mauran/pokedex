@@ -82,13 +82,15 @@ onMounted(() => {
     <div class="backgroundImg"></div>
     <div class="mainContentDiv">
         <div class="container">
-            <article>
+            <article class="bigScreen">
                 <img class="pokeImgBig" :src="pokeImg" alt="image of the {{pokemon.name}}" :style="customStyle">
                 <pokemonRadarChart class="chart" :seriesData="statsList" />
 
             </article>
 
             <article>
+                <img class="pokeImgBig smallScreen" :src="pokeImg" alt="image of the {{pokemon.name}}" :style="customStyle">
+
                 <h1 class="bigTitle">{{ pokemon.name }}</h1>
                 <div class="typeDiv">
                     <h3 v-for="t in pokeType" :class="t.type.name">{{ t.type.name }}</h3>
@@ -107,6 +109,8 @@ onMounted(() => {
                     <pokemonCard v-for="evol in evolutionChain" :key="evol.id" :name="evol.name" :url="evol.url"
                         :pokemonImgUrl="evol.img" :pokemonImgAlt="evol.name" :id="evol.id" :evolCard=true />
                 </div>
+                <pokemonRadarChart class="chart smallScreen" :seriesData="statsList" />
+
             </article>
 
         </div>
@@ -116,10 +120,15 @@ onMounted(() => {
 <style scoped>
 /* Actual css */
 
+.smallScreen{
+    display: none;
+}
 .evolutionList {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    border: 2px solid black;
+    border-radius: 10px;
 }
 
 .chart {
@@ -169,6 +178,31 @@ onMounted(() => {
 article {
     width: 30vw;
 }
+
+
+
+@media screen and (max-width: 1300px){
+
+    .mainContentDiv{
+        flex-direction: column; 
+        align-items: center;
+        text-align: center;
+    }
+
+    .bigScreen{
+        display: none;
+    }
+    .smallScreen{
+        display: flex;
+    }
+
+    article{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 
 
 

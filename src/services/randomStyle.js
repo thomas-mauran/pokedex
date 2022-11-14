@@ -9,12 +9,12 @@ export function randomBorderRadius(){
 }
 
 export function randomColor(){
-    return `box-shadow: 0px 5px 5px 3px rgba(${randomNumber(255, 50)}, ${randomNumber(255, 50)}, ${randomNumber(200, 50)}, 0.8`
+    return `box-shadow: 0px 5px 5px 3px rgba(${randomNumber(255, 50)}, ${randomNumber(255, 50)}, ${randomNumber(200, 50)}, 0.8);`
 
 }
 
 export function randomColorBg(){
-    return `background-color: rgba(${randomNumber(255, 50)}, ${randomNumber(255, 50)}, ${randomNumber(200, 50)}, 0.8`
+    return `background-color: rgba(${randomNumber(255, 50)}, ${randomNumber(255, 50)}, ${randomNumber(200, 50)}, 0.8);`
 
 }
 

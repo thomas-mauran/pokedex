@@ -1,6 +1,6 @@
 <script setup>
 
-import {randomBorderRadius, randomColor} from "../services/randomStyle"
+import {randomBorderRadius, randomColor, randomColorBg} from "../services/randomStyle"
 
 import {defineProps, ref} from "vue"
 const props = defineProps({
@@ -15,9 +15,14 @@ const props = defineProps({
     },
 })
 
-const customStyle = randomBorderRadius() + randomColor()
-const customClass = props.evolCard ? 'evolCard' : 'pokemonCard'
+let customStyle
+if(props.evolCard === false){
+    customStyle = randomBorderRadius() + randomColor()
+}
 
+
+const customClass = props.evolCard ? 'evolCard' : 'pokemonCard'
+console.log(customStyle)
 </script>
 <template>
 
@@ -52,11 +57,9 @@ const customClass = props.evolCard ? 'evolCard' : 'pokemonCard'
         display: flex;
         flex-direction: column;
         align-items: center;
-        
+        background-color: transparent;
         width: 200px;
         margin: 20px;
-        padding: 20px 30px;
-        box-shadow: 3px 3px 3px 3px black;
         transition: 0.1s ease-in-out;
         cursor: pointer;
         color: black;
