@@ -37,29 +37,31 @@ function fetchPokemonInfo() {
 }
 
 function fetchEvolutionChain(id) {
-    evolutionChain.value += {
-        name: pokemon.value.name,
-        img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}` 
-    }
-    P.getEvolutionChainById(id).then(function (response) {
 
+    P.getEvolutionChainById(id).then(function (response) {
+        console.log({response: response})
         reccursiveEvolRetrieve(response.chain)
-        // evolutionChain.value += {
-        //     name: response.chain.evolves_to[0].species.name
-        //     img: 
-        // }
     })
+    console.log(evolutionChain.value)
+
 }
 
-function reccursiveEvolRetrieve(arr){
+function reccursiveEvolRetrieve(arr) {
     // Base case
 
-    console.log(arr)
-    console.log(arr.hasOwnProperty('evolves_to'))
-    if(!arr.evolves_to){
+
+    if (!arr.evolves_to) {
         return
     }
-    console.log(arr.species.name)
+    let id = arr.species.url.split("/")[6]
+    console.log(id)
+    evolutionChain.value.push({
+        name: arr.species.name,
+        img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+        id: id,
+        url: `/pokemon/${arr.species.name}`
+
+    })
     reccursiveEvolRetrieve(arr.evolves_to[0])
 }
 
@@ -86,17 +88,18 @@ onMounted(() => {
                 </div>
 
                 <ul>
-                    <li>Id : #{{pokemon.id}}</li>
+                    <li>Id : #{{ pokemon.id }}</li>
                     <li>Height : {{ pokemon.height }}</li>
                     <li>Weight : {{ pokemon.weight }}</li>
                     <li>Base experience : {{ pokemon.base_experience }}</li>
                 </ul>
 
                 <h1>Evolutions :</h1>
-                
 
-
-
+                <div class="evolutionList">
+                    <pokemonCard v-for="evol in evolutionChain" :key="evol.id" :name="evol.name" :url="evol.url"
+                        :pokemonImgUrl="evol.img" :pokemonImgAlt="evol.name" :id="evol.id" :evolCard=true />
+                </div>
             </article>
 
         </div>
@@ -105,6 +108,12 @@ onMounted(() => {
 </template>
 <style scoped>
 /* Actual css */
+
+.evolutionList{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
 .chart {
     padding-right: 100px;

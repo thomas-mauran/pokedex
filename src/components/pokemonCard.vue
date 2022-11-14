@@ -8,15 +8,20 @@ const props = defineProps({
     pokemonImgUrl: String,
     pokemonImgAlt: String,
     url: String,
-    id: String
+    id: String,
+    evolCard: {
+        type: Boolean, 
+        default: false
+    },
 })
 
 const customStyle = randomBorderRadius() + randomColor()
+const customClass = props.evolCard ? 'evolCard' : 'pokemonCard'
 
 </script>
 <template>
 
-    <a class="pokemonCard" :href="url" :style="customStyle">
+    <a :class="customClass" :href="url" :style="customStyle">
         <img :src="pokemonImgUrl" :alt="pokemonImgAlt">
         <h4>#{{id}}</h4>
         <h2>{{name}}</h2>
@@ -42,5 +47,27 @@ const customStyle = randomBorderRadius() + randomColor()
     .pokemonCard:hover{
         background-color: rgba(240, 240, 240, 1);
     }
+
+    .evolCard{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        width: 200px;
+        margin: 20px;
+        padding: 20px 30px;
+        box-shadow: 3px 3px 3px 3px black;
+        transition: 0.1s ease-in-out;
+        cursor: pointer;
+        color: black;
+    }
+
+    .evolCard h2{
+        font-size: 1em;
+    }
+    .evolCard img {
+        max-width: 100px;
+    }
+    
 
 </style>
