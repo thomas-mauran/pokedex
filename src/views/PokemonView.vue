@@ -29,32 +29,21 @@ function fetchPokemonInfo() {
         response.stats.forEach(stat => {
             statsList.value.push(stat.base_stat)
         })
-        fetchEvolutionChain(pokemon.value.id)
+        fetchEvolutionChain(pokemon.value.name)
+
 
     })
 
 
 }
 
-function fetchEvolutionChain(id) {
-
-    P.getEvolutionChainById(id).then(function (response) {
-        console.log({response: response})
-        reccursiveEvolRetrieve(response.chain)
-    })
-    console.log(evolutionChain.value)
-
-}
 
 function reccursiveEvolRetrieve(arr) {
     // Base case
-
-
     if (!arr.evolves_to) {
         return
     }
     let id = arr.species.url.split("/")[6]
-    console.log(id)
     evolutionChain.value.push({
         name: arr.species.name,
         img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
@@ -65,8 +54,26 @@ function reccursiveEvolRetrieve(arr) {
     reccursiveEvolRetrieve(arr.evolves_to[0])
 }
 
+function fetchEvolutionChain(name) {
+    P.getPokemonSpeciesByName(name).then(function (response) {
+        let pokemonSpeciesId = response.evolution_chain ? response.evolution_chain.url.split("/")[6] : null
+
+        // retrieve the pokemon species to then retrieve the evolution chain id 
+
+        P.getEvolutionChainById(pokemonSpeciesId).then(function (response) {
+            reccursiveEvolRetrieve(response.chain)
+        })
+
+    })
+
+
+
+
+}
+
 onMounted(() => {
     fetchPokemonInfo()
+
 })
 
 </script>
@@ -109,7 +116,7 @@ onMounted(() => {
 <style scoped>
 /* Actual css */
 
-.evolutionList{
+.evolutionList {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
