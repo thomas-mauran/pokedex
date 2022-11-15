@@ -58,8 +58,9 @@ console.log(customStyle)
         flex-direction: column;
         align-items: center;
         background-color: transparent;
-        width: 200px;
-        margin: 20px;
+        margin: 10px 30px;
+        
+        max-width: 150px;
         transition: 0.1s ease-in-out;
         cursor: pointer;
         color: black;

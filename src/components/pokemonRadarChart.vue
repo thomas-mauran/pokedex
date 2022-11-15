@@ -47,7 +47,7 @@
 </script>
 
 <template>
-  <apexchart class="chart" width="700px"  type="radar" :options="chartOptions" :series="series"/>
+  <apexchart class="chart" width="600px"  type="radar" :options="chartOptions" :series="series"/>
 </template>
 
 <style>

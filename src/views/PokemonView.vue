@@ -5,7 +5,7 @@ import { onMounted, ref } from "vue"
 import pokemonRadarChart from "../components/pokemonRadarChart.vue";
 import { randomBorderRadius, randomColorBg } from "../services/randomStyle"
 import pokemonCard from "../components/pokemonCard.vue";
-
+import loading from "../components/loading.vue"
 const route = useRoute();
 const name = route.params.id;
 
@@ -17,21 +17,31 @@ const pokeImg = ref("")
 const pokeType = ref([])
 const statsList = ref([])
 const evolutionChain = ref([])
+const customEvolGridClass = ref("")
+const pokemonExists = ref(null)
+
 
 function fetchPokemonInfo() {
     P.getPokemonByName(name).then(function (response) {
+
         pokemon.value = response
-        pokeImg.value = response.sprites.other["official-artwork"].front_default
+        // pokeImg.value = response.sprites.other["official-artwork"].front_default
+        let existsAnimatedSprite = response.sprites.versions["generation-v"]["black-white"].animated.front_default
+        console.log(existsAnimatedSprite)
+        pokeImg.value = existsAnimatedSprite ? existsAnimatedSprite : response.sprites.front_default
+
         pokeType.value = [...response.types]
         // statsList.value = response.stats.map(stat => stat.base_stat)
-        // console.log(statsList.value)
 
         response.stats.forEach(stat => {
             statsList.value.push(stat.base_stat)
         })
         fetchEvolutionChain(pokemon.value.name)
 
+        pokemonExists.value = true
 
+    }).catch(function (error) {
+        pokemonExists.value = false
     })
 
 
@@ -43,35 +53,42 @@ function reccursiveEvolRetrieve(arr) {
     if (!arr.evolves_to) {
         return
     }
-    console.log(arr)
-    arr.evolves_to.forEach((element) => {
-        let id = element.species.url.split("/")[6]
 
-        evolutionChain.value.push({
-        name: element.species.name,
+    let id = arr.species.url.split("/")[6]
+
+    evolutionChain.value.push({
+        name: arr.species.name,
         img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
         id: id,
-        url: `/pokemon/${element.species.name}`
-
-        })
+        url: `/pokemon/${arr.species.name}`
     })
-    
-    reccursiveEvolRetrieve(arr.evolves_to[0])
+
+
+    arr.evolves_to.forEach((element) => {
+        reccursiveEvolRetrieve(element)
+    })
+
 }
 
 function fetchEvolutionChain(name) {
     P.getPokemonSpeciesByName(name).then(function (response) {
+
+        pokemon.value.description = response.flavor_text_entries.filter(elem => elem.language.name == "en")[0].flavor_text
         let pokemonSpeciesId = response.evolution_chain ? response.evolution_chain.url.split("/")[6] : null
 
         // retrieve the pokemon species to then retrieve the evolution chain id 
 
         P.getEvolutionChainById(pokemonSpeciesId).then(function (response) {
             reccursiveEvolRetrieve(response.chain)
+
+            // resize the evolList grid
+
+
+
+            customEvolGridClass.value = `grid-template-columns: repeat(${evolutionChain.value.length > 3 ? 3 : evolutionChain.value.length}, 1fr);`
         })
 
     })
-
-
 
 
 }
@@ -86,21 +103,27 @@ onMounted(() => {
 
     <div class="backgroundImg"></div>
     <div class="mainContentDiv">
-        <div class="container">
+        
+        <section class="container" v-if="pokemonExists === true">
             <article class="bigScreen">
-                <img class="pokeImgBig" :src="pokeImg" alt="image of the {{pokemon.name}}" :style="customStyle">
+                <picture :style="customStyle">
+                    <img class="pokeImgBig"  :src="pokeImg" :alt="'image of ' + pokemon.name">
+                </picture>     
                 <pokemonRadarChart class="chart" :seriesData="statsList" />
-
             </article>
 
             <article>
-                <img class="pokeImgBig smallScreen" :src="pokeImg" alt="image of the {{pokemon.name}}" :style="customStyle">
-
+                <picture :style="customStyle">
+                    <img class="pokeImgBig smallScreen" :src="pokeImg" :alt="'image of ' + pokemon.name">
+                </picture>
                 <h1 class="bigTitle">{{ pokemon.name }}</h1>
                 <div class="typeDiv">
                     <h3 v-for="t in pokeType" :class="t.type.name">{{ t.type.name }}</h3>
                 </div>
+                <h2>Description : </h2>
+                <p>{{ pokemon.description }}</p>
 
+                <h2>Infos : </h2>
                 <ul>
                     <li>Id : #{{ pokemon.id }}</li>
                     <li>Height : {{ pokemon.height }}</li>
@@ -108,32 +131,63 @@ onMounted(() => {
                     <li>Base experience : {{ pokemon.base_experience }}</li>
                 </ul>
 
-                <h1>Evolutions :</h1>
+                <h2>Evolutions :</h2>
 
-                <div class="evolutionList">
+                <!-- Big screen -->
+                <picture class="evolutionList bigScreen" :style="customEvolGridClass">
                     <pokemonCard v-for="evol in evolutionChain" :key="evol.id" :name="evol.name" :url="evol.url"
                         :pokemonImgUrl="evol.img" :pokemonImgAlt="evol.name" :id="evol.id" :evolCard=true />
-                </div>
+                </picture>
+
+                <!-- Small screen -->
+                <picture class="evolutionList smallScreen">
+                    <pokemonCard v-for="evol in evolutionChain" :key="evol.id" :name="evol.name" :url="evol.url"
+                        :pokemonImgUrl="evol.img" :pokemonImgAlt="evol.name" :id="evol.id" :evolCard=true />
+                </picture>
+
                 <pokemonRadarChart class="chart smallScreen" :seriesData="statsList" />
 
             </article>
 
-        </div>
+        </section>
+        <section v-else-if="pokemonExists === false"  class="container"  >
+            <!-- insert gif  -->
+            <h1 class="bigTitle">Pokemon not found</h1>
+        </section>
+        
+        <section v-else>
+            <loading />
+        </section>
+
     </div>
 
 </template>
 <style scoped>
 /* Actual css */
-
-.smallScreen{
-    display: none;
+.test{
+    padding: 100px 0px ;
 }
+
+h2 {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+
 .evolutionList {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     border: 2px solid black;
     border-radius: 10px;
+    width: fit-content;
 }
+
+
+.smallScreen {
+    display: none;
+}
+
+
 
 .chart {
     padding-right: 100px;
@@ -155,16 +209,16 @@ onMounted(() => {
 }
 
 .pokeImgBig {
-    width: 20vw;
+    width: 17vw;
     padding: 20px;
     min-width: 200px;
+    image-rendering: pixelated;
 }
 
 .mainContentDiv {
     display: flex;
     flex-direction: row;
     justify-content: center;
-
     margin: 20px;
 }
 
@@ -173,10 +227,12 @@ onMounted(() => {
     flex-direction: row;
     justify-content: space-around;
     background-color: rgba(255, 255, 255, 1);
+    min-width: 400px;
+
     padding: 20px;
     border-radius: 15px;
     box-shadow: 3px 3px 3px black;
-    width: 70vw;
+    width: 75vw;
 }
 
 article {
@@ -185,26 +241,45 @@ article {
 
 
 
-@media screen and (max-width: 1300px){
+@media screen and (max-width: 1400px) {
 
-    .mainContentDiv{
-        flex-direction: column; 
+    .mainContentDiv {
+        flex-direction: column;
         align-items: center;
         text-align: center;
     }
 
-    .bigScreen{
-        display: none;
-    }
-    .smallScreen{
+
+    .smallScreen {
         display: flex;
     }
 
-    article{
+    .evolutionList {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .bigScreen {
+        display: none;
+    }
+
+    article {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+
+
+}
+
+
+
+@media screen and (max-width: 600px) {
+
+
+    .bigScreen {
+        display: none;
+    }
+
 }
 
 

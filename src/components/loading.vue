@@ -5,5 +5,6 @@
 <style>
 .loadingGif{
     width: 10vw;
+    image-rendering: pixelated;
 }
 </style>
