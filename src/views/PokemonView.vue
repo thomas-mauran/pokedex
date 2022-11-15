@@ -105,6 +105,7 @@ onMounted(() => {
     <div class="mainContentDiv">
         
         <section class="container" v-if="pokemonExists === true">
+            <!-- Big screen -->
             <article class="bigScreen">
                 <picture :style="customStyle">
                     <img class="pokeImgBig"  :src="pokeImg" :alt="'image of ' + pokemon.name">
@@ -146,7 +147,6 @@ onMounted(() => {
                 </picture>
 
                 <pokemonRadarChart class="chart smallScreen" :seriesData="statsList" />
-
             </article>
 
         </section>
@@ -156,7 +156,7 @@ onMounted(() => {
         </section>
         
         <section v-else>
-            <loading />
+            <loading style="width: 300px"/>
         </section>
 
     </div>
@@ -164,8 +164,10 @@ onMounted(() => {
 </template>
 <style scoped>
 /* Actual css */
-.test{
-    padding: 100px 0px ;
+
+picture{
+    display: flex;
+    width: fit-content;
 }
 
 h2 {
@@ -210,7 +212,7 @@ h2 {
 
 .pokeImgBig {
     width: 17vw;
-    padding: 20px;
+    padding: 40px;
     min-width: 200px;
     image-rendering: pixelated;
 }
@@ -242,7 +244,9 @@ article {
 
 
 @media screen and (max-width: 1400px) {
-
+    .chart {
+        padding: 0px 0px 0px 40px;
+    }
     .mainContentDiv {
         flex-direction: column;
         align-items: center;
@@ -254,10 +258,7 @@ article {
         display: flex;
     }
 
-    .evolutionList {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-    }
+
     .bigScreen {
         display: none;
     }
@@ -273,9 +274,12 @@ article {
 
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 650px) {
 
-
+    .evolutionList {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
     .bigScreen {
         display: none;
     }
