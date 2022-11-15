@@ -43,14 +43,19 @@ function reccursiveEvolRetrieve(arr) {
     if (!arr.evolves_to) {
         return
     }
-    let id = arr.species.url.split("/")[6]
-    evolutionChain.value.push({
-        name: arr.species.name,
+    console.log(arr)
+    arr.evolves_to.forEach((element) => {
+        let id = element.species.url.split("/")[6]
+
+        evolutionChain.value.push({
+        name: element.species.name,
         img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
         id: id,
-        url: `/pokemon/${arr.species.name}`
+        url: `/pokemon/${element.species.name}`
 
+        })
     })
+    
     reccursiveEvolRetrieve(arr.evolves_to[0])
 }
 
@@ -124,9 +129,8 @@ onMounted(() => {
     display: none;
 }
 .evolutionList {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     border: 2px solid black;
     border-radius: 10px;
 }

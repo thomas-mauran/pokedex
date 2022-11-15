@@ -26,9 +26,7 @@
     fill: {
       opacity: 0.1
     },
-    markers: {
-      size: 3
-    },
+
     xaxis: {
       categories: ["hp", "attack", "defense", "special-attack", "special-defense", "speed"]
     },
