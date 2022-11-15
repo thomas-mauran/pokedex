@@ -50,6 +50,8 @@ AOS.init();
   <div class="verticalAlign mainContentDiv">
     <h1 class="bigTitle">Liste des pokémons</h1>
 
+    <input type="text" placeholder="search any pokemon by name or id " class="searchBar">
+
     <div class="pokemonGrid">
       <pokemonCard
         v-for="pokemon in pokemonList"
@@ -75,7 +77,15 @@ AOS.init();
     </button>
   </div>
 </template>
-<style>
+<style>*
+
+.searchBar{
+  padding: 10px 20px;
+  min-width: 200px;
+  width: 15%;
+  border-radius: 10px;
+}
+
 .backgroundImg {
   top: 0px;
   position: fixed;
