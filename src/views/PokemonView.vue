@@ -358,4 +358,8 @@ article {
 .water {
     background-color: blue;
 }
+
+.dragon{
+    background-color: rgb(68, 8, 163);
+}
 </style>
