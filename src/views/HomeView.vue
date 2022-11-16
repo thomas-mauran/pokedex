@@ -11,20 +11,26 @@ let pokemonList = ref([]);
 const numberOfPok = ref(0);
 const limit = 48;
 const isLoading = ref(false);
+const searchBarInput = ref("")
+const fullPokemonList = ref([])
+
+async function getPokemonList() {
+  await P.getPokemonsList({ offset: 0, limit: 1200 }).then(function (response) {
+    fullPokemonList.value = response.result
+  })
+}
 
 async function fetchPokemon(offset = 0) {
   isLoading.value = true;
   await P.getPokemonsList({ offset, limit }).then(function (response) {
     for (let i = 0; i < response.results.length; i++) {
       let pokemon = response.results[i];
-      console.log(numberOfPok.value);
 
       let currentPokemon = {
         name: pokemon.name,
         url: `/pokemon/${pokemon.name}`,
-        pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-          i + numberOfPok.value + 1
-        }.png`,
+        pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + numberOfPok.value + 1
+          }.png`,
         pokemonImgAlt: `Image du pokemon ${pokemon.name}`,
         id: i + numberOfPok.value + 1,
       };
@@ -36,9 +42,35 @@ async function fetchPokemon(offset = 0) {
   isLoading.value = false;
 }
 
+async function searchPokemon() {
+
+  pokemonList.value = []
+  let input = searchBarInput.value.toLocaleLowerCase()
+
+  console.log(fullPokemonList.value.length)
+  fullPokemonList.value.forEach(element => {
+    if (element.name.toLowerCase().includes(input)) {
+      let currentPokemon = {
+        name: pokemon.name,
+        url: `/pokemon/${pokemon.name}`,
+        pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + numberOfPok.value + 1
+          }.png`,
+        pokemonImgAlt: `Image du pokemon ${pokemon.name}`,
+        id: i + numberOfPok.value + 1,
+      };
+      pokemonList.value.push(currentPokemon);
+    }
+  });
+
+}
+
+
+
+
 onMounted(() => {
   AOS.init();
   fetchPokemon(numberOfPok.value);
+  getPokemonList()
 });
 
 AOS.init();
@@ -50,36 +82,23 @@ AOS.init();
   <div class="verticalAlign mainContentDiv">
     <h1 class="bigTitle">Liste des pokémons</h1>
 
-    <input type="text" placeholder="search any pokemon by name or id " class="searchBar">
+    <input v-on:input="searchPokemon" type="text" placeholder="search any pokemon by name or id " class="searchBar"
+      v-model="searchBarInput">
 
     <div class="pokemonGrid">
-      <pokemonCard
-        v-for="pokemon in pokemonList"
-        :key="pokemon.name"
-        :name="pokemon.name"
-        :url="pokemon.url"
-        :pokemonImgUrl="pokemon.pokemonImgUrl"
-        :pokemonImgAlt="pokemon.pokemonImgUrl"
-        :id="pokemon.id"
-        data-aos="flip-left"
-        data-aos-easing="ease-out-cubic"
-        data-aos-duration="500"
-      />
+      <pokemonCard v-for="pokemon in pokemonList" :key="pokemon.name" :name="pokemon.name" :url="pokemon.url"
+        :pokemonImgUrl="pokemon.pokemonImgUrl" :pokemonImgAlt="pokemon.pokemonImgUrl" :id="pokemon.id"
+        data-aos="flip-left" data-aos-easing="ease-out-cubic" data-aos-duration="500" />
     </div>
     <loading v-if="isLoading === true"></loading>
 
-    <button
-      v-if="isLoading === false"
-      class="loadMoreBtn"
-      @click="fetchPokemon(numberOfPok)"
-    >
+    <button v-if="isLoading === false" class="loadMoreBtn" @click="fetchPokemon(numberOfPok)">
       Load {{ limit }} more
     </button>
   </div>
 </template>
-<style>*
-
-.searchBar{
+<style>
+* .searchBar {
   padding: 10px 20px;
   min-width: 200px;
   width: 15%;
@@ -120,28 +139,26 @@ AOS.init();
 }
 
 .pokemonGrid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 5vw;
+}
+
+
+@media screen and (max-width: 1100px) {
+  .pokemonGrid {
+    grid-template-columns: repeat(2, 1fr);
     grid-column-gap: 5vw;
+
   }
-
-
-@media screen and (max-width: 1100px){
-    .pokemonGrid{
-        grid-template-columns: repeat(2, 1fr);
-        grid-column-gap: 5vw;
-
-    }
 }
 
 
 
-@media screen and (max-width: 600px){
-    .pokemonGrid{
-        display: flex;
-        flex-direction: column;
-    }
+@media screen and (max-width: 600px) {
+  .pokemonGrid {
+    display: flex;
+    flex-direction: column;
+  }
 }
-
-
 </style>

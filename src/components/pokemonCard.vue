@@ -22,7 +22,6 @@ if(props.evolCard === false){
 
 
 const customClass = props.evolCard ? 'evolCard' : 'pokemonCard'
-console.log(customStyle)
 </script>
 <template>
 
