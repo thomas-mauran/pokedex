@@ -16,7 +16,7 @@ const fullPokemonList = ref([])
 
 async function getPokemonList() {
   await P.getPokemonsList({ offset: 0, limit: 1200 }).then(function (response) {
-    fullPokemonList.value = response.result
+    fullPokemonList.value = response.results
   })
 }
 
@@ -29,7 +29,7 @@ async function fetchPokemon(offset = 0) {
       let currentPokemon = {
         name: pokemon.name,
         url: `/pokemon/${pokemon.name}`,
-        pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + numberOfPok.value + 1
+        pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + offset + 1
           }.png`,
         pokemonImgAlt: `Image du pokemon ${pokemon.name}`,
         id: i + numberOfPok.value + 1,
@@ -44,23 +44,28 @@ async function fetchPokemon(offset = 0) {
 
 async function searchPokemon() {
 
+
   pokemonList.value = []
   let input = searchBarInput.value.toLocaleLowerCase()
 
-  console.log(fullPokemonList.value.length)
-  fullPokemonList.value.forEach(element => {
-    if (element.name.toLowerCase().includes(input)) {
+  if(input.length === 0) fetchPokemon(0)
+  else{
+    fullPokemonList.value.forEach(element => {
+    if (element.name.toLowerCase().startsWith(input)) {
+      let id = element.url.split("/")[6]
       let currentPokemon = {
-        name: pokemon.name,
-        url: `/pokemon/${pokemon.name}`,
-        pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + numberOfPok.value + 1
-          }.png`,
-        pokemonImgAlt: `Image du pokemon ${pokemon.name}`,
-        id: i + numberOfPok.value + 1,
+        name: element.name,
+        url: `/pokemon/${element.name}`,
+        pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+        pokemonImgAlt: `Image du pokemon ${element.name}`,
+        id: id,
       };
       pokemonList.value.push(currentPokemon);
     }
   });
+
+  }
+  
 
 }
 
