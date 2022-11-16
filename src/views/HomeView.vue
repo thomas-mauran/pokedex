@@ -32,7 +32,7 @@ async function fetchPokemon(offset = 0) {
         pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + offset + 1
           }.png`,
         pokemonImgAlt: `Image du pokemon ${pokemon.name}`,
-        id: i + numberOfPok.value + 1,
+        id: i + offset+ 1,
       };
       pokemonList.value.push(currentPokemon);
     }
@@ -85,7 +85,7 @@ AOS.init();
   <div class="backgroundImg"></div>
 
   <div class="verticalAlign mainContentDiv">
-    <h1 class="bigTitle">Liste des pokémons</h1>
+    <h1 class="bigTitle">Pokemon List</h1>
 
     <input v-on:input="searchPokemon" type="text" placeholder="search any pokemon by name or id " class="searchBar"
       v-model="searchBarInput">
