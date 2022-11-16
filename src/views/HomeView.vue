@@ -97,7 +97,7 @@ AOS.init();
     </div>
     <loading v-if="isLoading === true"></loading>
 
-    <button v-if="isLoading === false" class="loadMoreBtn" @click="fetchPokemon(numberOfPok)">
+    <button v-if="isLoading === false && searchBarInput.length === 0" class="loadMoreBtn" @click="fetchPokemon(numberOfPok)">
       Load {{ limit }} more
     </button>
   </div>
