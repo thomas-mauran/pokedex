@@ -50,8 +50,8 @@ async function searchPokemon() {
 
   if(input.length === 0) fetchPokemon(0)
   else{
-    fullPokemonList.value.forEach(element => {
-    if (element.name.toLowerCase().startsWith(input)) {
+    fullPokemonList.value.forEach((element, index) => {
+    if (element.name.toLowerCase().startsWith(input) || index.toString().startsWith(input - 1) ) {
       let id = element.url.split("/")[6]
       let currentPokemon = {
         name: element.name,
