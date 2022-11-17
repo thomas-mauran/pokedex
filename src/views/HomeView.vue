@@ -16,7 +16,16 @@ const fullPokemonList = ref([])
 
 async function getPokemonList() {
   await P.getPokemonsList({ offset: 0, limit: 1200 }).then(function (response) {
+    response.results.forEach(element => {
+      let id = element.url.split("/")[6]
+
+      element.url = `/pokemon/${element.name}`,
+      element.pokemonImgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+      element.pokemonImgAlt = `Image of : ${element.name}`,
+      element.id = id
+    })
     fullPokemonList.value = response.results
+
   })
 }
 
@@ -31,7 +40,7 @@ async function fetchPokemon(offset = 0) {
         url: `/pokemon/${pokemon.name}`,
         pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + offset + 1
           }.png`,
-        pokemonImgAlt: `Image du pokemon ${pokemon.name}`,
+        pokemonImgAlt: `Image of ${pokemon.name}`,
         id: i + offset+ 1,
       };
       pokemonList.value.push(currentPokemon);
@@ -43,7 +52,7 @@ async function fetchPokemon(offset = 0) {
 }
 
 async function searchPokemon() {
-
+  isLoading.value = true
 
   pokemonList.value = []
   let input = searchBarInput.value.toLocaleLowerCase()
@@ -51,25 +60,17 @@ async function searchPokemon() {
   if(input.length === 0) fetchPokemon(0)
   else{
     fullPokemonList.value.forEach((element, index) => {
-    if (element.name.toLowerCase().startsWith(input) || index.toString().startsWith(input - 1) ) {
-      let id = element.url.split("/")[6]
-      let currentPokemon = {
-        name: element.name,
-        url: `/pokemon/${element.name}`,
-        pokemonImgUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
-        pokemonImgAlt: `Image du pokemon ${element.name}`,
-        id: id,
-      };
-      pokemonList.value.push(currentPokemon);
+    if (element.name.toLowerCase().startsWith(input) || element.id.toString().startsWith(input) ) {
+ 
+      pokemonList.value.push(element);
     }
   });
 
+  isLoading.value = false
+
   }
-  
 
 }
-
-
 
 
 onMounted(() => {
@@ -80,7 +81,7 @@ onMounted(() => {
 
 AOS.init();
 </script>
-
+ 
 <template>
   <div class="backgroundImg"></div>
 
@@ -90,12 +91,12 @@ AOS.init();
     <input v-on:input="searchPokemon" type="text" placeholder="search any pokemon by name or id " class="searchBar"
       v-model="searchBarInput">
 
+    <loading v-if="isLoading === true"></loading>
     <div class="pokemonGrid">
       <pokemonCard v-for="pokemon in pokemonList" :key="pokemon.name" :name="pokemon.name" :url="pokemon.url"
-        :pokemonImgUrl="pokemon.pokemonImgUrl" :pokemonImgAlt="pokemon.pokemonImgUrl" :id="pokemon.id"
+        :pokemonImgUrl="pokemon.pokemonImgUrl" :pokemonImgAlt="pokemon.pokemonImgAlt" :id="pokemon.id"
         data-aos="flip-left" data-aos-easing="ease-out-cubic" data-aos-duration="500" />
     </div>
-    <loading v-if="isLoading === true"></loading>
 
     <button v-if="isLoading === false && searchBarInput.length === 0" class="loadMoreBtn" @click="fetchPokemon(numberOfPok)">
       Load {{ limit }} more
@@ -104,9 +105,11 @@ AOS.init();
 </template>
 <style>
 * .searchBar {
-  padding: 10px 20px;
+  text-align: center;
+  padding: 20px 40px;
+  margin: 10px;
   min-width: 200px;
-  width: 15%;
+  width: 20%;
   border-radius: 10px;
 }
 
