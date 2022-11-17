@@ -25,11 +25,13 @@ function fetchPokemonInfo() {
     P.getPokemonByName(name).then(function (response) {
 
         pokemon.value = response
-        // pokeImg.value = response.sprites.other["official-artwork"].front_default
         let existsAnimatedSprite = response.sprites.versions["generation-v"]["black-white"].animated.front_default
         console.log(existsAnimatedSprite)
         pokeImg.value = existsAnimatedSprite ? existsAnimatedSprite : response.sprites.front_default
-
+        console.log(pokeImg.value)
+        if(pokeImg.value == null) {
+            pokeImg.value = "/src/assets/unknown.png"
+        }
         pokeType.value = [...response.types]
         // statsList.value = response.stats.map(stat => stat.base_stat)
 
@@ -117,7 +119,7 @@ onMounted(() => {
                 <picture :style="customStyle">
                     <img class="pokeImgBig smallScreen" :src="pokeImg" :alt="'image of ' + pokemon.name">
                 </picture>
-                <h1 class="bigTitle">{{ pokemon.name }}</h1>
+                <h1 class="bigTitle">{{ pokemon.name }} #{{pokemon.id}}</h1>
                 <div class="typeDiv">
                     <h3 v-for="t in pokeType" :class="t.type.name">{{ t.type.name }}</h3>
                 </div>
@@ -126,7 +128,6 @@ onMounted(() => {
 
                 <h2>Infos : </h2>
                 <ul>
-                    <li>Id : #{{ pokemon.id }}</li>
                     <li>Height : {{ pokemon.height }}</li>
                     <li>Weight : {{ pokemon.weight }}</li>
                     <li>Base experience : {{ pokemon.base_experience }}</li>
@@ -135,16 +136,18 @@ onMounted(() => {
                 <h2>Evolutions :</h2>
 
                 <!-- Big screen -->
-                <picture class="evolutionList bigScreen" :style="customEvolGridClass">
+                <picture v-if="evolutionChain.length !== 0" class="evolutionList bigScreen" :style="customEvolGridClass">
                     <pokemonCard v-for="evol in evolutionChain" :key="evol.id" :name="evol.name" :url="evol.url"
                         :pokemonImgUrl="evol.img" :pokemonImgAlt="evol.name" :id="evol.id" :evolCard=true />
                 </picture>
 
                 <!-- Small screen -->
-                <picture class="evolutionList smallScreen">
+                <picture v-if="evolutionChain.length !== 0" class="evolutionList smallScreen">
                     <pokemonCard v-for="evol in evolutionChain" :key="evol.id" :name="evol.name" :url="evol.url"
                         :pokemonImgUrl="evol.img" :pokemonImgAlt="evol.name" :id="evol.id" :evolCard=true />
                 </picture>
+
+                <h2 v-if="evolutionChain.length === 0" class="redText">Not any evolutions</h2>
 
                 <pokemonRadarChart class="chart smallScreen" :seriesData="statsList" />
             </article>
@@ -164,6 +167,10 @@ onMounted(() => {
 </template>
 <style scoped>
 /* Actual css */
+
+.redText{
+    color: brown;
+}
 
 picture{
     display: flex;
