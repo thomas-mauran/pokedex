@@ -83,9 +83,9 @@ AOS.init();
 </script>
  
 <template>
-  <div class="backgroundImg"></div>
+  <section class="backgroundImg"></section>
 
-  <div class="verticalAlign mainContentDiv">
+  <section class="verticalAlign mainContentDiv">
     <h1 class="bigTitle">Pokemon List</h1>
 
     <input v-on:input="searchPokemon" type="text" placeholder="search any pokemon by name or id " class="searchBar"
@@ -101,10 +101,10 @@ AOS.init();
     <button v-if="isLoading === false && searchBarInput.length === 0" class="loadMoreBtn" @click="fetchPokemon(numberOfPok)">
       Load {{ limit }} more
     </button>
-  </div>
+  </section>
 </template>
 <style>
-* .searchBar {
+.searchBar {
   text-align: center;
   padding: 20px 40px;
   margin: 10px;
