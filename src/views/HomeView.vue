@@ -13,6 +13,7 @@ const limit = 48;
 const isLoading = ref(false);
 const searchBarInput = ref("")
 const fullPokemonList = ref([])
+const windowSize = ref(screen.width)
 
 async function getPokemonList() {
   await P.getPokemonsList({ offset: 0, limit: 1200 }).then(function (response) {
@@ -72,6 +73,12 @@ async function searchPokemon() {
 
 }
 
+addEventListener("resize", () => {
+    windowSize.value = window.innerWidth
+    console.log(windowSize.value)
+})
+
+
 
 onMounted(() => {
   AOS.init();
@@ -92,11 +99,15 @@ AOS.init();
       v-model="searchBarInput">
 
     <loading v-if="isLoading === true"></loading>
-    <div class="pokemonGrid">
-      <pokemonCard v-for="pokemon in pokemonList" :key="pokemon.name" :name="pokemon.name" :url="pokemon.url"
+    <li class="pokemonGrid">
+      <pokemonCard v-if="windowSize > 1000" v-for="pokemon in pokemonList" :key="pokemon.name" :name="pokemon.name" :url="pokemon.url"
         :pokemonImgUrl="pokemon.pokemonImgUrl" :pokemonImgAlt="pokemon.pokemonImgAlt" :id="pokemon.id"
         data-aos="flip-left" data-aos-easing="ease-out-cubic" data-aos-duration="500" />
-    </div>
+
+        <pokemonCard v-else v-for="pokemon in pokemonList"  :name="pokemon.name" :url="pokemon.url"
+        :pokemonImgUrl="pokemon.pokemonImgUrl" :pokemonImgAlt="pokemon.pokemonImgAlt" :id="pokemon.id"
+        />
+    </li>
 
     <button v-if="isLoading === false && searchBarInput.length === 0" class="loadMoreBtn" @click="fetchPokemon(numberOfPok)">
       Load {{ limit }} more

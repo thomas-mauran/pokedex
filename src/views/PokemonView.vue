@@ -95,6 +95,7 @@ function fetchEvolutionChain(name) {
 
 }
 
+
 onMounted(() => {
     fetchPokemonInfo()
 
@@ -102,7 +103,7 @@ onMounted(() => {
 
 </script>
 <template>
-
+{{windowSize}}
     <section class="backgroundImg"></section>
     <div class="mainContentDiv">
         
