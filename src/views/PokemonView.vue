@@ -103,7 +103,7 @@ onMounted(() => {
 </script>
 <template>
 
-    <div class="backgroundImg"></div>
+    <section class="backgroundImg"></section>
     <div class="mainContentDiv">
         
         <section class="container" v-if="pokemonExists === true">
