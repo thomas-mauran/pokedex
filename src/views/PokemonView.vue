@@ -26,9 +26,7 @@ function fetchPokemonInfo() {
 
         pokemon.value = response
         let existsAnimatedSprite = response.sprites.versions["generation-v"]["black-white"].animated.front_default
-        console.log(existsAnimatedSprite)
         pokeImg.value = existsAnimatedSprite ? existsAnimatedSprite : response.sprites.front_default
-        console.log(pokeImg.value)
         if(pokeImg.value == null) {
             pokeImg.value = "/src/assets/unknown.png"
         }

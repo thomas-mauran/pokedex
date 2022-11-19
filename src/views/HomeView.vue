@@ -75,7 +75,6 @@ async function searchPokemon() {
 
 addEventListener("resize", () => {
     windowSize.value = window.innerWidth
-    console.log(windowSize.value)
 })
 
 
